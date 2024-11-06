@@ -29,7 +29,7 @@ class LoginController extends Controller
         }
 
         // Change the redirection URL here
-        return redirect()->to('/')->with('success', 'successfully logged in');
+        return redirect()->to('/dashboard')->with('success', 'successfully logged in');
     }
 
     public function Logout(){

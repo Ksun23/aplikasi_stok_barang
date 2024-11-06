@@ -7,7 +7,7 @@ StokBarang.id | Home
 @section('content')
 
 <div class="px-[2.2cm] py-[3cm]">
-    @if (session('success'))
+@if (session('success'))
     <div class="alert alert-success alert-dismissible fade show" role="alert" id="successAlert">
         {{ session('success') }}
     </div>
