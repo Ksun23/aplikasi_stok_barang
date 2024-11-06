@@ -12,8 +12,7 @@
                 <li><a class="font-semibold text-xl btn btn-primary mr-3" href="{{ route('auth.login') }}">Login</a></li>
                 <li><a class="font-semibold text-xl btn" href="{{ route('auth.register') }}">Register</a></li>
                 @else 
-                <li><a class="btn btn-primary font-semibold text-xl" href="{{ route('dashboard') }}">Dashboard</a></li>
-                <li><a class="font-semibold text-xl" href="{{ route('logout') }}">Logout</a></li>
+                <li><a class="font-semibold text-white text-xl btn btn-error" href="{{ route('logout') }}">Logout</a></li>
                 @endif
             </ul>
         </div>

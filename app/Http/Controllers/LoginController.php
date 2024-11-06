@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -29,6 +28,7 @@ class LoginController extends Controller
             return back()->with('error', 'Password invalid');
         }
 
+        // Change the redirection URL here
         return redirect()->to('/')->with('success', 'successfully logged in');
     }
 
