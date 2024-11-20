@@ -7,16 +7,6 @@ StokBarang.id | Home
 @section('content')
 
 <div class="px-[2.2cm] py-[3cm]">
-@if (session('success'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert" id="successAlert">
-        {{ session('success') }}
-    </div>
-    <script>
-        setTimeout(function() {
-            document.getElementById('successAlert').remove();
-        }, 3000); // Will disappear after 3 seconds
-    </script>
-    @endif
     <div class="grid grid-cols-2">
         <div>
             <h1 class="text-4xl md:text-5xl font-bold mb-6 text-gray-800">
@@ -32,7 +22,7 @@ StokBarang.id | Home
             </p>
         </div>
         <div class="flex justify-center">
-            <img src="{{ asset('/storage/images/1311295_395.svg') }}" alt="" width="500px" height="500px">
+            <img src="{{ asset('/storage/images/rb_395.png') }}" alt="" width="500px" height="500px">
         </div>
 
     </div>

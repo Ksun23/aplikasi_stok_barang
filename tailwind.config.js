@@ -15,6 +15,9 @@ export default {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
         },
+        daisyui: {
+            themes: ["light", "dark", "cupcake"],
+        },
     },
     plugins: [
         require('daisyui'),
