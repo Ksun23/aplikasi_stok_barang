@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Barang;
+use App\Models\Kategori;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -10,60 +11,77 @@ class DashboardController extends Controller
 {
     public function Dashboard()
     {
-        $barang = Barang::all();
-        return view('dashboard.index', ['barang' => $barang]);
+        $barang = Barang::all(); // Ambil semua barang
+        $kategoris = Kategori::all(); // Ambil semua kategori
+        return view('dashboard.index', ['barang' => $barang, 'kategoris' => $kategoris]);
+    }
+
+    public function show($id)
+    {
+        $barang = Barang::find($id);
+        return response()->json($barang);
+    }
+
+    public function create()
+    {
+        $kategoris = Kategori::all();
+        return view('dashboard.tambah', compact('kategoris'));
+    }
+
+    public function edit($id)
+    {
+        $barang = Barang::find($id);
+        $kategoris = Kategori::all();
+        return view('dashboard.edit', compact('barang', 'kategoris'));
     }
 
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'nama_barang' => 'required|string|max:255',
+            'nama_barang' => 'required',
+            'kategori_id' => 'required|exists:kategoris,id',
             'harga_barang' => 'required|numeric',
             'stok_barang' => 'required|integer',
             'deskripsi_barang' => 'nullable|string',
             'gambar_barang' => 'nullable|image|max:2048',
         ]);
 
-        if ($request->hasFile('gambar_barang')) {
-            $validatedData['gambar_barang'] = $request->file('gambar_barang')->store('barang_images', 'public');
-        }
-
         Barang::create($validatedData);
 
-        return redirect()->route('dashboard.index')->with('success', 'Barang berhasil ditambahkan.');
+        return redirect()->back()->with('success', 'Barang berhasil ditambahkan.');
     }
 
     public function update(Request $request, $id)
     {
         $barang = Barang::find($id);
-
         $validatedData = $request->validate([
             'nama_barang' => 'required|string|max:255',
-            'harga_barang' => 'required|numeric',
+            'harga_barang' => 'required|numeric', 
             'stok_barang' => 'required|integer',
             'deskripsi_barang' => 'nullable|string',
             'gambar_barang' => 'nullable|image|max:2048',
+            'kategori_id' => 'required|exists:kategoris,id',
+            'jumlah_rusak' => 'required|integer|min:0'
         ]);
 
-        $barang->nama_barang = $validatedData['nama_barang'];
-        $barang->harga_barang = $validatedData['harga_barang'];
-        $barang->deskripsi_barang = $validatedData['deskripsi_barang'];
-        $barang->stok_barang = $validatedData['stok_barang'];
+        // Calculate previous damaged items
+        $previousDamaged = $barang->barangRusak ? $barang->barangRusak->jumlah_rusak : 0;
+        $newDamaged = $request->input('jumlah_rusak', 0);
 
-        if ($request->hasFile('gambar_barang')) {
-            // Hapus gambar lama
-            if ($barang->gambar_barang) {
-                Storage::disk('public')->delete($barang->gambar_barang);
-            }
+        // Adjust stock based on damaged items difference
+        $stockAdjustment = $newDamaged - $previousDamaged;
+        $validatedData['stok_barang'] = $barang->stok_barang - $stockAdjustment;
 
-            // Simpan gambar baru
-            $validatedData['gambar_barang'] = $request->file('gambar_barang')->store('barang_images', 'public');
-            $barang->gambar_barang = $validatedData['gambar_barang'];
-        }
+        // Update the barang
+        $barang->update($validatedData);
 
-        $barang->save();
+        // Update damaged items record
+        $barang->barangRusak()->updateOrCreate(
+            ['barang_id' => $barang->id],
+            ['jumlah_rusak' => $newDamaged]
+        );
 
-        return redirect()->route('dashboard.index')->with('success', 'Barang berhasil diperbarui.');
+        return redirect()->route('dashboard.index')->with('success', 'Barang berhasil diupdate');
     }
 
     public function destroy($id)

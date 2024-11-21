@@ -30,11 +30,11 @@
                 <li><a class="font-semibold text-xl" href="/about">Tentang</a></li>
                 <li><a class="font-semibold text-xl mr-2" href="/contact">Kontak</a></li>
                 @if(!Auth::check())
-                <li><a class="font-semibold text-xl btn btn-primary mr-3" href="{{ route('auth.login') }}">Login</a></li>
-                <li><a class="font-semibold text-xl btn" href="{{ route('auth.register') }}">Register</a></li>
+                <li><a class="font-semibold text-xl btn btn-primary mr-3" href="{{ route('auth.login') }}">Masuk</a></li>
+                <li><a class="font-semibold text-xl btn" href="{{ route('auth.register') }}">Daftar</a></li>
                 @else
-                <li><a class="font-semibold text-xl" href="{{ route('dashboard.index') }}">Dashboard</a></li>
-                <li><a class="font-semibold text-white text-xl btn btn-error" href="{{ route('logout') }}">Logout</a></li>
+                <li><a class="font-semibold text-xl btn btn-primary mr-4" href="{{ route('dashboard.index') }}">Dasbor</a></li>
+                <li><a class="font-semibold text-white text-xl btn btn-error" href="{{ route('logout') }}">keluar</a></li>
                 @endif
             </ul>
         </div>

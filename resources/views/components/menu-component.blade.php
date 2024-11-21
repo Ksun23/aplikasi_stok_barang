@@ -1,11 +1,9 @@
 <div>
-    <div class="h-screen w-[8cm] py-[2cm]">
-        <h1 class="text-4xl font-bold text-center">Dashboard</h1>
-        <div class="divider"></div>
-        <ul class="px-[1cm] mt-[1cm] flex flex-col gap-5">
-            <li><a class="font-semibold text-xl " href="/dashboard/tambahCategory">Tambah Category</a></li>
-            <li><a class="font-semibold text-xl" href="/dashboard/barangrusak">Barang Rusak</a></li>
-            <li><a class="font-semibold text-xl" href=""></a></li>
+    <div class="h-screen w-[8cm] py-[0.7cm]">
+        <ul class="px-[1cm]  flex flex-col gap-5">
+            <li><a class="font-semibold text-xl px-3 rounded-md py-2 hover:bg-primary hover:text-white" href="/dashboard">Barang</a></li>
+            <li><a class="font-semibold text-xl px-3 rounded-md py-2 hover:bg-primary hover:text-white" href="/dashboard/tambahCategory">kategori</a></li>
+            <li><a class="font-semibold text-xl px-3 rounded-md py-2 hover:bg-primary hover:text-white" href="/dashboard/barangrusak">Status Barang</a></li>
         </ul>
     </div>
 </div>

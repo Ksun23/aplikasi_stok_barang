@@ -22,7 +22,7 @@ StokBarang.id | Home
             </p>
         </div>
         <div class="flex justify-center">
-            <img src="{{ asset('/storage/images/rb_395.png') }}" alt="" width="500px" height="500px">
+            <img src="{{ asset('/storage/images/1311295_395.svg') }}" alt="" width="500px" height="500px">
         </div>
 
     </div>

@@ -15,6 +15,16 @@ class Barang extends Model
         'stok_barang',
         'deskripsi_barang',
         'gambar_barang',
+        'kategori_id', // Tambahkan kategori_id ke fillable
     ];
 
+    public function kategori()
+    {
+        return $this->belongsTo(Kategori::class, 'kategori_id');
+    }
+
+    public function barangRusak()
+    {
+        return $this->hasOne(BarangRusak::class);
+    }
 }

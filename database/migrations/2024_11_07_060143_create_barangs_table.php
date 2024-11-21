@@ -14,10 +14,11 @@ return new class extends Migration
         Schema::create('barangs', function (Blueprint $table) {
             $table->id();
             $table->string('nama_barang');
-            $table->integer(column:'harga_barang');
-            $table->integer(column:'stok_barang')->default(value: 0); ;
-            $table->text(column: 'deskripsi_barang');
+            $table->integer('harga_barang');
+            $table->integer('stok_barang')->default(0);
+            $table->text('deskripsi_barang');
             $table->string('gambar_barang');
+            $table->unsignedBigInteger('kategori_id')->nullable(); // Tambahkan kolom kategori_id sebagai nullable
             $table->timestamps();
         });
     }
