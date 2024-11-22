@@ -39,11 +39,7 @@
                     <tr>
                         <td>{{ $item->id }}</td>
                         <td>
-                            @if($item->gambar_barang)
                             <img src="{{ asset('storage/' . $item->gambar_barang) }}" alt="Gambar {{ $item->nama_barang }}" width="60">
-                            @else
-                            Tidak ada gambar
-                            @endif
                         </td>
                         <td>{{ $item->nama_barang }}</td>
                         <td>{{ $item->kategori->nama_kategori ?? 'Tidak ada kategori' }}</td>

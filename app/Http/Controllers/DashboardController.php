@@ -45,6 +45,11 @@ class DashboardController extends Controller
             'gambar_barang' => 'nullable|image|max:2048',
         ]);
 
+        if ($request->hasFile('gambar_barang')) {
+            $path = $request->file('gambar_barang')->store('public/gambar_barang');
+            $validatedData['gambar_barang'] = basename($path);
+        }
+
         Barang::create($validatedData);
 
         return redirect()->back()->with('success', 'Barang berhasil ditambahkan.');
@@ -63,24 +68,19 @@ class DashboardController extends Controller
             'jumlah_rusak' => 'required|integer|min:0'
         ]);
 
-        // Calculate previous damaged items
-        $previousDamaged = $barang->barangRusak ? $barang->barangRusak->jumlah_rusak : 0;
-        $newDamaged = $request->input('jumlah_rusak', 0);
+        if ($request->hasFile('gambar_barang')) {
+            // Hapus gambar lama jika ada
+            if ($barang->gambar_barang) {
+                Storage::delete('public/gambar_barang/' . $barang->gambar_barang);
+            }
 
-        // Adjust stock based on damaged items difference
-        $stockAdjustment = $newDamaged - $previousDamaged;
-        $validatedData['stok_barang'] = $barang->stok_barang - $stockAdjustment;
+            $path = $request->file('gambar_barang')->store('public/gambar_barang');
+            $validatedData['gambar_barang'] = basename($path);
+        }
 
-        // Update the barang
         $barang->update($validatedData);
 
-        // Update damaged items record
-        $barang->barangRusak()->updateOrCreate(
-            ['barang_id' => $barang->id],
-            ['jumlah_rusak' => $newDamaged]
-        );
-
-        return redirect()->route('dashboard.index')->with('success', 'Barang berhasil diupdate');
+        return redirect()->back()->with('success', 'Barang berhasil diperbarui.');
     }
 
     public function destroy($id)
