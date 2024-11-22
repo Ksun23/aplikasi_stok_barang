@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', 'Kategori')
+@section('title', 'Dashboard | Kategori')
 
 @section('content')
 <div class="w-[100%] h-screen px-[2cm]">

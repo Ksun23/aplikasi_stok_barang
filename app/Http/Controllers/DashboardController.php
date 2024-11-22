@@ -11,9 +11,8 @@ class DashboardController extends Controller
 {
     public function Dashboard()
     {
-        $barang = Barang::all(); // Ambil semua barang
-        $kategoris = Kategori::all(); // Ambil semua kategori
-        return view('dashboard.index', ['barang' => $barang, 'kategoris' => $kategoris]);
+        $barang = Barang::paginate(10); // Mengambil 10 item per halaman
+        return view('dashboard.index', compact('barang'));
     }
 
     public function show($id)

@@ -20,7 +20,7 @@ Dashboard | Barang Rusak
             <x-menu-component />
         </div>
         <div class="col-span-4">
-            <table class="table">
+            <table class="table border">
                 <thead>
                     <tr>
                         <th>Gambar</th>

@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', 'Dashboard')
+@section('title', 'Dashboard | Barang')
 
 @section('content')
 <div class="w-[100%] h-screen px-[2cm]">
@@ -40,9 +40,9 @@
                         <td>{{ $item->id }}</td>
                         <td>
                             @if($item->gambar_barang)
-                                <img src="{{ asset('storage/' . $item->gambar_barang) }}" alt="Gambar {{ $item->nama_barang }}" width="60">
+                            <img src="{{ asset('storage/' . $item->gambar_barang) }}" alt="Gambar {{ $item->nama_barang }}" width="60">
                             @else
-                                Tidak ada gambar
+                            Tidak ada gambar
                             @endif
                         </td>
                         <td>{{ $item->nama_barang }}</td>
@@ -62,6 +62,11 @@
                     @endforeach
                 </tbody>
             </table>
+            <div class="join mt-[1cm] flex justify-center">
+                @for ($i = 1; $i <= $barang->lastPage(); $i++)
+                    <a href="{{ $barang->url($i) }}" class="join-item btn {{ $i == $barang->currentPage() ? 'btn-active' : '' }}">{{ $i }}</a>
+                @endfor
+            </div>
         </div>
     </div>
 </div>

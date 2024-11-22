@@ -13,7 +13,7 @@
             <a class="font-semibold text-xl mr-3">Hello, {{ Auth::user()->name }}</a>
             @endif
             @if(session('success'))
-            <div class="alert alert-success w-[7cm]" id="success-alert">
+            <div class="alert alert-success w-[7cm] ml-5" id="success-alert">
                 {{ session('success') }}
             </div>
             <script>
