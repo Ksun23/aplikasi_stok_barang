@@ -42,43 +42,63 @@ class DashboardController extends Controller
             'harga_barang' => 'required|numeric',
             'stok_barang' => 'required|integer',
             'deskripsi_barang' => 'nullable|string',
-            'gambar_barang' => 'nullable|image|max:2048',
+            'gambar_barang' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
         if ($request->hasFile('gambar_barang')) {
-            $path = $request->file('gambar_barang')->store('public/gambar_barang');
-            $validatedData['gambar_barang'] = basename($path);
+            $image = $request->file('gambar_barang');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            // Change storage path
+            $path = $request->file('gambar_barang')->storeAs('gambar_barang', $imageName, 'public');
+            $validatedData['gambar_barang'] = 'gambar_barang/' . $imageName;
         }
 
         Barang::create($validatedData);
-
         return redirect()->back()->with('success', 'Barang berhasil ditambahkan.');
     }
 
     public function update(Request $request, $id)
     {
-        $barang = Barang::find($id);
+        $barang = Barang::findOrFail($id);
+
         $validatedData = $request->validate([
             'nama_barang' => 'required|string|max:255',
-            'harga_barang' => 'required|numeric', 
-            'stok_barang' => 'required|integer',
-            'deskripsi_barang' => 'nullable|string',
-            'gambar_barang' => 'nullable|image|max:2048',
+            'harga_barang' => 'required|numeric',
             'kategori_id' => 'required|exists:kategoris,id',
-            'jumlah_rusak' => 'required|integer|min:0'
+            'stok_barang' => 'required|integer',
+            'jumlah_rusak' => 'nullable|integer',
+            'deskripsi_barang' => 'nullable|string',
+            'gambar_barang' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
+        // Calculate new stock
+        $newStok = $request->stok_barang;
+        if (isset($validatedData['jumlah_rusak'])) {
+            $newStok = $request->stok_barang - $validatedData['jumlah_rusak'];
+        }
+        $validatedData['stok_barang'] = $newStok;
+
         if ($request->hasFile('gambar_barang')) {
-            // Hapus gambar lama jika ada
+            // Delete old image
             if ($barang->gambar_barang) {
                 Storage::delete('public/gambar_barang/' . $barang->gambar_barang);
             }
 
-            $path = $request->file('gambar_barang')->store('public/gambar_barang');
-            $validatedData['gambar_barang'] = basename($path);
+            // Store new image
+            $image = $request->file('gambar_barang');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $path = $request->file('gambar_barang')->storeAs('gambar_barang', $imageName, 'public');
+            $validatedData['gambar_barang'] = $path; // Simpan path lengkap yang sesuai
+
         }
 
         $barang->update($validatedData);
+
+        // Update damaged items record
+        $barang->barangRusak()->updateOrCreate(
+            [],
+            ['jumlah_rusak' => $validatedData['jumlah_rusak'] ?? 0]
+        );
 
         return redirect()->back()->with('success', 'Barang berhasil diperbarui.');
     }
@@ -86,8 +106,13 @@ class DashboardController extends Controller
     public function destroy($id)
     {
         $barang = Barang::findOrFail($id);
-        $barang->delete();
 
+        // Delete image if exists
+        if ($barang->gambar_barang) {
+            Storage::delete('public/gambar_barang/' . $barang->gambar_barang);
+        }
+
+        $barang->delete();
         return redirect()->route('dashboard.index')->with('success', 'Barang berhasil dihapus.');
     }
 }

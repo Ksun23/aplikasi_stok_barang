@@ -39,7 +39,10 @@
                     <tr>
                         <td>{{ $item->id }}</td>
                         <td>
-                            <img src="{{ asset('storage/' . $item->gambar_barang) }}" alt="Gambar {{ $item->nama_barang }}" width="60">
+                            <img src="{{ asset('storage/' . $item->gambar_barang) }}"
+                                alt="{{ $item->nama_barang }}" class="w-20 h-20 object-cover">
+
+
                         </td>
                         <td>{{ $item->nama_barang }}</td>
                         <td>{{ $item->kategori->nama_kategori ?? 'Tidak ada kategori' }}</td>
@@ -61,7 +64,7 @@
             <div class="join mt-[1cm] flex justify-center">
                 @for ($i = 1; $i <= $barang->lastPage(); $i++)
                     <a href="{{ $barang->url($i) }}" class="join-item btn {{ $i == $barang->currentPage() ? 'btn-active' : '' }}">{{ $i }}</a>
-                @endfor
+                    @endfor
             </div>
         </div>
     </div>
